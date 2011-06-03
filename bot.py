@@ -11,6 +11,8 @@ import module
 # The IRC bot itself
 class Bot(object):
 
+    self.module = Module()
+
     # Set needed variables when created
     def __init__(self, nick, server, port, channel):
         self.nick = nick
@@ -41,8 +43,8 @@ class Bot(object):
         # Try to parse the event and execute from modules if available
         try:
             # If this fails, module.action_fallback will be called
-            ret = module.actions.get(argp[0], 
-                                     module.action_fallback)(nickname, argument)
+            ret = self.module.actions.get(argp[0], 
+                                     self.module.action_fallback)(nickname, argument)
         except:
             return connection.privmsg(self.channel, "Module threw exception")
         

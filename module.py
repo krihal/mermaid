@@ -8,76 +8,80 @@ import sys
 
 from os.path import exists
 
-modules = {}
+class Module(object):
 
-# Module fallback, just cowardly return
-def action_fallback(nickname, str):
-    return
+    self.modules = {}
 
-# Lookup module name and return True if it is loaded
-def module_loaded(name):
-    if not name in modules:
-        return False
-    return True      
+    # Default actions, used by event handler
+    self.actions = {
+        ".load": module_load,
+        ".unload": module_unload,
+        ".reload": module_reload,
+        }
 
-# Add module to modules and register it
-def module_add(name):
-    modules[name] = __import__("plugins/" + name)
+    # Module fallback, just cowardly return
+    def action_fallback(self, nickname, str):
+        return
 
-    # Call the __register__ function available in all modules
-    modules[name].__register__(actions)
+    # Lookup module name and return True if it is loaded
+    def module_loaded(self, name):
+        if not name in modules:
+            return False
 
-# Unregister module and remove references   
-def module_del(name):
-    modules[name].__unregister__(actions)
+        return True      
 
-    # This will remove the references to the module, not only the namespace
-    del sys.modules["plugins/" + name] 
-    del modules[name]
+    # Add module to modules and register it
+    def module_add(self, name):
+        modules[name] = __import__("plugins/" + name)
+        
+        # Call the __register__ function available in all modules
+        modules[name].__register__(actions)
 
-# Load module
-def module_load(nickname, name):
+    # Unregister module and remove references   
+    def module_del(self, name):
+        modules[name].__unregister__(actions)
+        
+        # This will remove the references to the module, not only
+        # the namespace
+        del sys.modules["plugins/" + name] 
+        del modules[name]
+
+    # Load module
+    def module_load(self, nickname, name):
     
-    # Exists in plugins/ folder?
-    if not exists("plugins/" + name + ".py"):
-        return "Module " + name + " not found"
+        # Exists in plugins/ folder?
+        if not exists("plugins/" + name + ".py"):
+            return "Module " + name + " not found"
 
-    # Already loaded?
-    if module_loaded(name):
-        return "Module " + name + " already loaded"
+        # Already loaded?
+        if module_loaded(name):
+            return "Module " + name + " already loaded"
 
-    # Load it
-    module_add(name)
-    return "Module " + name + " loaded"
+        # Load it
+        module_add(name)
+        return "Module " + name + " loaded"
 
-# Unload module
-def module_unload(nickname, name):
+    # Unload module
+    def module_unload(self, nickname, name):
 
-    # Loaded?
-    if module_loaded(name) == False:
-        return "Module " + name + " not loaded"
+        # Loaded?
+        if module_loaded(name) == False:
+            return "Module " + name + " not loaded"
 
-    # Unregister and remove
-    module_del(name)
+        # Unregister and remove
+        module_del(name)
 
-    return "Module " + name + " unloaded"
+        return "Module " + name + " unloaded"
 
-# Reload module
-def module_reload(nickname, name):
+    # Reload module
+    def module_reload(self, nickname, name):
 
-    # Return of not loaded
-    if module_loaded(name) == False:
-        return "Module " + name + " not loaded"
+        # Return of not loaded
+        if module_loaded(name) == False:
+            return "Module " + name + " not loaded"
 
-    # Remove and add again
-    module_del(name)
-    module_add(name)
+        # Remove and add again
+        module_del(name)
+        module_add(name)
 
-    return "Module " + name + " reloaded"
-
-# Default actions, used by event handler
-actions = {
-    ".load": module_load,
-    ".unload": module_unload,
-    ".reload": module_reload,
-    }
+        return "Module " + name + " reloaded"
