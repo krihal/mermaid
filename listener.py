@@ -21,7 +21,7 @@ class Listener(object):
         return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def socket_bind(self, serversocket):
-        serversocket.bind(("", self.port))
+        serversocket.bind(("", 1234))
 
     def socket_listen(self, serversocket):
         serversocket.listen(5)

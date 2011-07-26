@@ -11,14 +11,14 @@ import module
 # The IRC bot itself
 class Bot(object):
 
-    self.module = Module()
-
     # Set needed variables when created
     def __init__(self, nick, server, port, channel):
         self.nick = nick
         self.server = server 
         self.port = port
         self.channel = channel
+
+        self.module = module.Module()
 
     def on_connect(self, connection, event):
         print "  Connection created"
@@ -59,7 +59,7 @@ class Bot(object):
     # Create IRC socket and register handlers
     def create(self):
         self.irc = irclib.IRC()
-
+ 
         connection = self.irc.server().connect(self.server, 
                                                self.port, 
                                                self.nick)

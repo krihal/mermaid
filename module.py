@@ -10,14 +10,15 @@ from os.path import exists
 
 class Module(object):
 
-    self.modules = {}
+    def __init__(self):
+        self.modules = {}
 
-    # Default actions, used by event handler
-    self.actions = {
-        ".load": module_load,
-        ".unload": module_unload,
-        ".reload": module_reload,
-        }
+        # Default actions, used by event handler
+        self.actions = {
+            ".load": self.module_load,
+            ".unload": self.module_unload,
+            ".reload": self.module_reload,
+            }
 
     # Module fallback, just cowardly return
     def action_fallback(self, nickname, str):
