@@ -44,13 +44,13 @@ class Bot(object):
         try:
             # If this fails, module.action_fallback will be called
             ret = self.module.actions.get(argp[0], 
-                                     self.module.action_fallback)(nickname, argument)
+                                          self.module.action_fallback)(nickname, argument)
         except:
             return connection.privmsg(self.channel, "Module threw exception")
         
         if ret != None:
             connection.privmsg(self.channel, ret)
-
+            
     # Process IRC events
     def start(self):
         print "  Entering event loop..."
