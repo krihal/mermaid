@@ -11,9 +11,9 @@ import os
 import sys
 import ConfigParser
 
-from bot import bot
-from listener import listener
-from threading import Thread
+import bot
+import listener
+import threading
 from os.path import exists
 
 # Fork to background
@@ -28,11 +28,11 @@ def daemonize():
 def launch(nickname, server, port, channel, listenerport):
 
     # Create Bot instance
-    mermaid = Bot(nickname, server, port, channel)
+    mermaid = bot.Bot(nickname, server, port, channel)
     ircsocket = mermaid.create()
 
     # Create listener instance
-    talker = Listener(listenerport, ircsocket, channel)
+    talker = listener.Listener(listenerport, ircsocket, channel)
     lsocket = talker.create()
     
     return talker, mermaid
@@ -41,10 +41,10 @@ def launch(nickname, server, port, channel, listenerport):
 def create_threads(talker, mermaid):
 
     # Create listener thread
-    listener_thread = Thread(target = talker.start)
+    listener_thread = threading.Thread(target = talker.start)
 
     # Creat bot thread
-    bot_thread = Thread(target = mermaid.start)
+    bot_thread = threading.Thread(target = mermaid.start)
 
     # Start threads
     listener_thread.start() 
@@ -53,14 +53,11 @@ def create_threads(talker, mermaid):
 def main():
 
     # Configuration
-    config = ConfigParser.RawConfigParser()
-    config.read("mermaid.cfg")
-
-    nickname = config.get("nickname", "bot")
-    server = config.get("server", "bot")
-    port = config.getint("port", "bot")
-    channel = config.get("channel", "bot")
-    listenerport = config.get("port", "listener")
+    nickname = "Nickname"
+    server = "irc.freenode.org"
+    port = 6667
+    channel = "#channel"
+    listenerport = 1234
 
     daemonize()
     talker, mermaid = launch(nickname, server, port, channel, listenerport)
