@@ -16,8 +16,10 @@ class Title(object):
     def is_url(self, url):
         if not re.search('((https?:\/\/|www\.)\S+)', url, re.IGNORECASE):
             return None
+
         if not re.search('[^:]+:\/\/', url):
             url = 'http://' + url
+
         return url
 
     def extract_html(self, url):
@@ -37,7 +39,7 @@ class Title(object):
     def parse_title(self, url):
         url = self.is_url(url)
         if url == None:
-            return      
+            return None
 
         html = self.extract_html(url)
         if html == None:
@@ -54,14 +56,14 @@ class Title(object):
 if __name__ == '__main__':
     title = Title()
 
-    ret =  title.parse_title("http://www.google.com")
+    ret = title.parse_title("http://www.google.com")
     if ret != None:
         print ret
 
-    ret = title.parse_title("http://www.youtube.com")
+    ret = title.parse_title("www.youtube.com/watch?v=BcsduzIF2p0")
     if ret != None:
         print ret
 
-    ret = title.parse_title("http://www.asdslssssse.com")
+    ret = title.parse_title("www.sadasdasdsssssss.com")
     if ret != None:
         print ret
