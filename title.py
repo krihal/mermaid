@@ -23,7 +23,12 @@ class Title(object):
     def extract_html(self, url):
         timeout_time = socket.getdefaulttimeout()
         socket.setdefaulttimeout(15)
-        data = urllib2.urlopen(url)
+
+        try:
+            data = urllib2.urlopen(url)
+        except:
+            return None
+
         html = data.read();
         socket.setdefaulttimeout(timeout_time)       
         
@@ -35,6 +40,9 @@ class Title(object):
             return      
 
         html = self.extract_html(url)
+        if html == None:
+            return None
+
         m = re.search('<title[^>]*>\s*(.+?)\s*<\/title>', html, re.IGNORECASE|re.MULTILINE)
         if m:
             title = m.group(1)
@@ -45,5 +53,15 @@ class Title(object):
 
 if __name__ == '__main__':
     title = Title()
-    print title.parse_title("http://www.google.com")
-    print title.parse_title("http://www.youtube.com")
+
+    ret =  title.parse_title("http://www.google.com")
+    if ret != None:
+        print ret
+
+    ret = title.parse_title("http://www.youtube.com")
+    if ret != None:
+        print ret
+
+    ret = title.parse_title("http://www.asdslssssse.com")
+    if ret != None:
+        print ret
