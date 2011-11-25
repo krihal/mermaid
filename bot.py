@@ -20,13 +20,12 @@ class Bot(object):
         self.channel = channel
 
         self.module = module.Module()
+        self.title = title.Title()
 
     def on_connect(self, connection, event):
-        print "  Connection created"
         return connection.join(self.channel)
 
     def on_disconnect(self, connection, event):
-        print "  Disconnecting..."
         return connection.connect(self.server, self.port, self.nick)
 
     # Event handler, all events will be parsed here
@@ -42,7 +41,7 @@ class Bot(object):
             argument = argp[2]
 
         # Find out if this is a URL
-        ret = title.parse_title(argument)
+        ret = self.title.parse_title(argp[0])
         if ret != None:
             return connection.privmsg(self.channel, ret)
 
@@ -59,7 +58,6 @@ class Bot(object):
             
     # Process IRC events
     def start(self):
-        print "  Entering event loop..."
         self.irc.process_forever()
 
     # Create IRC socket and register handlers
@@ -70,12 +68,8 @@ class Bot(object):
                                                self.port, 
                                                self.nick)
 
-        print "  Connection to " + self.server + " created"
-
         connection.add_global_handler("welcome", self.on_connect)
         connection.add_global_handler("disconnect", self.on_disconnect)
         connection.add_global_handler("pubmsg", self.on_event)
-        
-        print "  Handlers created"
 
         return connection
