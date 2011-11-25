@@ -7,6 +7,7 @@ import os
 import sys
 import irclib
 import module
+import title
 
 # The IRC bot itself
 class Bot(object):
@@ -39,6 +40,11 @@ class Bot(object):
             argument = ""
         else:
             argument = argp[2]
+
+        # Find out if this is a URL
+        ret = title.parse_title(argument)
+        if ret != None:
+            return connection.privmsg(self.channel, ret)
 
         # Try to parse the event and execute from modules if available
         try:
