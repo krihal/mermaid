@@ -1,3 +1,4 @@
+# Copyright © 2011, Kristofer Hallin (kristofer.hallin@gmail.com)
 #
 # Mermaid, IRC bot written by Kristofer Hallin
 # kristofer.hallin@gmail.com
