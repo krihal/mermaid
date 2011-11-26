@@ -37,6 +37,16 @@ class Title(object):
         
         return html
 
+    def get_title(self, html):
+        m = re.search('<title[^>]*>\s*(.+?)\s*<\/title>', html, re.IGNORECASE|re.MULTILINE)
+        if m:
+            title = m.group(1)
+            title = re.sub('\s+', ' ', title)
+            return title
+
+        return None
+
+
     def parse_title(self, url):
         url = self.is_url(url)
         if url == None:
@@ -46,13 +56,7 @@ class Title(object):
         if html == None:
             return None
 
-        m = re.search('<title[^>]*>\s*(.+?)\s*<\/title>', html, re.IGNORECASE|re.MULTILINE)
-        if m:
-            title = m.group(1)
-            title = re.sub('\s+', ' ', title)
-            return title
-
-        return None
+        return self.get_title(html)
 
 if __name__ == '__main__':
     title = Title()
