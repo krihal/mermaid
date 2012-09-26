@@ -17,6 +17,7 @@ class Module(object):
             ".unload": self.module_unload,
             ".reload": self.module_reload,
             }
+        self.modules_autoload("plugins/")
 
     # Module fallback, just cowardly return
     def action_fallback(self, nickname, str):
@@ -81,3 +82,12 @@ class Module(object):
         self.module_add(name)
 
         return "Module " + name + " reloaded"
+
+    # Autoload all modules in plugins/ folder
+    def modules_autoload(self, path):
+        modules = [file for file in os.listdir(path) if file.lower().endswith(".py")]
+        for module in modules:
+            self.module_load("None", "plugins/" + module)
+
+if __name__ == '__main__':
+    m = Module()
