@@ -1,4 +1,5 @@
-# Copyright (C) 2011, Kristofer Hallin (kristofer.hallin@gmail.com)
+#
+# Copyright 2011, Kristofer Hallin (kristofer.hallin@gmail.com)
 #
 # Mermaid, IRC bot written by Kristofer Hallin
 # kristofer.hallin@gmail.com
@@ -13,6 +14,7 @@ import sys
 import ConfigParser
 
 import bot
+import log
 import listener
 import threading
 from os.path import exists
@@ -54,13 +56,13 @@ def create_threads(talker, mermaid):
 def main():
 
     # Configuration
-    nickname = "Nickname"
+    nickname = "Ningyo"
     server = "irc.freenode.org"
     port = 6667
-    channel = "#channel"
+    channel = "#flapflap"
     listenerport = 1234
 
-    daemonize()
+#    daemonize()
     talker, mermaid = launch(nickname, server, port, channel, listenerport)
     create_threads(talker, mermaid)
 
