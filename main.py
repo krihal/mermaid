@@ -56,7 +56,7 @@ def create_threads(talker, mermaid):
 def main():
 
     # Configuration
-    nickname = "Ningyo"
+    nickname = "MooPoo"
     server = "irc.freenode.org"
     port = 6667
     channel = "#flapflap"

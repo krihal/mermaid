@@ -24,7 +24,7 @@ class Module(object):
             ".reload": self.module_reload,
             }
 
-#        self.modules_autoload("plugins/")
+        self.modules_autoload("plugins/")
 
     # Module fallback, just cowardly return
     def action_fallback(self, nickname, str):
@@ -102,11 +102,11 @@ class Module(object):
         modules = [file for file in os.listdir(path) if file.lower().endswith(".py")]
         for module in modules:
             self.log.debug("Loading module " + module)
-            self.module_load("None", "plugins/" + module)
+            self.module_load("None", module)
 
-if __name__ == '__main__':
-    m = Module()
-    m.module_load("test", "nextep")
-    m.module_reload("test", "nextep")
-    m.module_unload("test", "nextep")
-    m.modules_autoload("plugins/")
+ if __name__ == '__main__':
+     m = Module()
+     m.module_load("test", "nextep")
+     m.module_reload("test", "nextep")
+     m.module_unload("test", "nextep")
+     m.modules_autoload("plugins/")
