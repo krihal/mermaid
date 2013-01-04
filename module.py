@@ -39,9 +39,8 @@ class Module(object):
 
     def module_add(self, module_name):
         name = os.path.splitext(os.path.basename(module_name))[0]
-        full_name = os.path.splitext(module_name)[0].replace(os.path.sep, '.')
 
-        self.modules[name] = imp.load_module(full_name, *imp.find_module(name, ["plugins/"]))
+        self.modules[name] = imp.load_module(name, *imp.find_module(name, ["plugins/"]))
         self.modules[name].__register__(self.actions)
 
     def module_del(self, name):
@@ -49,8 +48,8 @@ class Module(object):
         del self.modules[name]
 
     def module_load(self, nickname, name):
-        if not exists("plugins/" + name + ".py"):
-            self.log.debug("Module " + name + " not found in directory")
+        if os.path.isfile("plugins/" + name + ".py") == True:
+            self.log.debug("Module " + name + ".py not found in directory")
             return "Module " + name + " not found"
 
         if self.module_loaded(name):
@@ -80,6 +79,7 @@ class Module(object):
     def modules_autoload(self, path):
         modules = [file for file in os.listdir(path) if file.lower().endswith(".py")]
         for module in modules:
+            module = os.path.splitext(module)[0]
             self.log.debug("Loading module " + module)
             self.module_load("None", "plugins/" + module)
 
