@@ -16,6 +16,7 @@ import ConfigParser
 import bot
 import log
 import listener
+import notifier
 import threading
 from os.path import exists
 
@@ -28,7 +29,7 @@ def daemonize():
         sys.exit(0)
 
 # Create objects and sockets
-def launch(nickname, server, port, channel, listenerport):
+def launch(nickname, server, port, channel, listenerport, paths):
 
     # Create Bot instance
     mermaid = bot.Bot(nickname, server, port, channel)
@@ -38,10 +39,13 @@ def launch(nickname, server, port, channel, listenerport):
     talker = listener.Listener(listenerport, ircsocket, channel)
     lsocket = talker.create()
     
-    return talker, mermaid
+    # Notify support
+    notify = notifier.Notifier(ircsocket, channel, paths)    
+
+    return talker, mermaid, notify
 
 # Create threads and start the bot
-def create_threads(talker, mermaid):
+def create_threads(talker, mermaid, notify):
 
     # Create listener thread
     listener_thread = threading.Thread(target = talker.start)
@@ -49,22 +53,27 @@ def create_threads(talker, mermaid):
     # Creat bot thread
     bot_thread = threading.Thread(target = mermaid.start)
 
+    # Notify thread
+    notify_thread = threading.Thread(target = notify.start)
+
     # Start threads
     listener_thread.start() 
     bot_thread.start()
+    notify_thread.start()
 
 def main():
 
     # Configuration
-    nickname = "Ningyo"
-    server = "irc.freenode.org"
+    nickname = "XXX"
+    server = "irc.quakenet.org"
     port = 6667
-    channel = "#flapflap"
+    channel = "XXX"
     listenerport = 1234
+    paths = "XXX"
 
-#    daemonize()
-    talker, mermaid = launch(nickname, server, port, channel, listenerport)
-    create_threads(talker, mermaid)
+    daemonize()
+    talker, mermaid, notify = launch(nickname, server, port, channel, listenerport, paths)
+    create_threads(talker, mermaid, notify)
 
 if __name__ == '__main__':
     main()

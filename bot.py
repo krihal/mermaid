@@ -38,6 +38,9 @@ class Bot(object):
         self.log.debug("Got event, parsing")
         arg = event.arguments()[0]
         argp = arg.partition(' ')
+
+        print event.source()
+        
         nickname = event.source().split('!')[0]
 
         # Allow empty arguments
