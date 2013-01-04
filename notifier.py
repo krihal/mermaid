@@ -7,7 +7,7 @@ class EventException(Exception):
 
 class Notify(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
-        raise EventException("Created: %s " % os.path.join(event.path, event.name))
+        raise EventException("Created: %s " % event.name)
 
 class Notifier():
     def __init__(self, ircsocket, ircchannel, path):

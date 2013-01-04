@@ -11,10 +11,7 @@ import irclib
 import module
 import title
 
-# The IRC bot itself
 class Bot(object):
-
-    # Set needed variables when created
     def __init__(self, nick, server, port, channel):
         self.log = log.Logger("bot")
         self.nick = nick
@@ -33,30 +30,23 @@ class Bot(object):
         self.log.debug("Disconnected")
         return connection.connect(self.server, self.port, self.nick)
 
-    # Event handler, all events will be parsed here
     def on_event(self, connection, event):        
         self.log.debug("Got event, parsing")
         arg = event.arguments()[0]
         argp = arg.partition(' ')
-
-        print event.source()
         
         nickname = event.source().split('!')[0]
 
-        # Allow empty arguments
         if len(argp[2]) == 0:
             argument = ""
         else:
             argument = argp[2]
 
-        # Find out if this is a URL
         ret = self.title.parse_title(argp[0])
         if ret != None:
             return connection.privmsg(self.channel, ret)
 
-        # Try to parse the event and execute from modules if available
         try:
-            # If this fails, module.action_fallback will be called
             ret = self.module.actions.get(argp[0], 
                                           self.module.action_fallback)(nickname, argument)
         except Exception as e:
@@ -67,11 +57,9 @@ class Bot(object):
             self.log.debug("To channel: " + ret)
             connection.privmsg(self.channel, ret)
             
-    # Process IRC events
     def start(self):
         self.irc.process_forever()
 
-    # Create IRC socket and register handlers
     def create(self):
         self.irc = irclib.IRC()
 

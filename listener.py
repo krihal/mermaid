@@ -10,10 +10,8 @@ import log
 import socket
 import select
 
-# Create a socket and send events to IRC channel
 class Listener(object):
 
-    # Set variables when created
     def __init__(self, port, ircsocket, ircchannel):
         self.log = log.Logger("listener")
         self.port = port
@@ -48,12 +46,10 @@ class Listener(object):
         self.socket_listen(serversocket)
         return serversocket
 
-    # Start event loop
     def start(self):
         while 1:            
             listener = [self.serversocket]
             
-            # Wait for something to arrive to socket
             self.log.debug("Waiting for data")                    
             ready = select.select(listener,[],[])
             if not ready:
@@ -64,6 +60,5 @@ class Listener(object):
             if data:
                 self.log.debug("Received data on socket")
         
-                # Send read string to channel
                 self.ircsocket.privmsg(self.ircchannel, data)
                 client.close()

@@ -10,7 +10,7 @@ class Logger(object):
         console_logger = logging.StreamHandler()
         console_logger.setLevel(logging.DEBUG)
 
-        formatter = logging.Formatter("[%(name)s] \t[%(levelname)s]:\t%(message)s")
+        formatter = logging.Formatter("[%(levelname)s]: %(message)s")
         console_logger.setFormatter(formatter)
 
         self.logger.addHandler(console_logger)
