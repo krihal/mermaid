@@ -37,3 +37,7 @@ def __register__(actions):
 
 def __unregister__(actions):
     del actions[".weather"]
+
+if __name__ == "__main__":
+	print fetch_weather("Hallin", "Stockholm")
+	

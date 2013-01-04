@@ -15,7 +15,7 @@ class IRCLib(network.NetLib):
         self.channels = {}
         self.net = network.NetLib(self.host, self.port)
         self.sock = self.net.create()
-         
+
     def __match_str__(self, str, pattern):
         match = re.match(pattern, str)
         if match:
@@ -23,7 +23,7 @@ class IRCLib(network.NetLib):
         
         return False
                     
-    def __timeout__(self, signum, frame):
+    def __timeout__(self):
         raise Exception("Timeout")
 
     def connect(self):
